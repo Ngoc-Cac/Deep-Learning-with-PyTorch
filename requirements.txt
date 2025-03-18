@@ -1,5 +1,9 @@
+# PyTorch for DL
 torch
 torchaudio
 torchvision
 
+# Visualiation library
 matplotlib
+
+notebook
