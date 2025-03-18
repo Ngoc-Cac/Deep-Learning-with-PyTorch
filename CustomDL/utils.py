@@ -40,6 +40,7 @@ def train_model(
 
         if track_loss:
             print(f"Batch {batch:>{num_digits}}/{len(train_loader)} || Loss: {loss}")
+
 def test_model(
     model: nn.Module,
     test_loader: DataLoader,
