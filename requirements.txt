@@ -1,9 +1,5 @@
-# PyTorch for DL
-torch
-torchaudio
-torchvision
-
 # Visualiation library
 matplotlib
 
-notebook
+# To run Jupyter Notebook
+ipykernel
