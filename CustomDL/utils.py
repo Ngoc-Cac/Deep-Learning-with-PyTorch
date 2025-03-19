@@ -4,13 +4,16 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
+from typing import Optional
+
 
 def train_model(
     model: nn.Module,
     train_loader: DataLoader,
     loss_fn: nn.Module,
     optimizer: nn.Module,
-    track_loss: bool = False
+    track_loss: bool = False,
+    use_gpu: bool = False
 ):
     """
     Performs backpropogation on `model` using `optimizer`.
@@ -27,6 +30,9 @@ def train_model(
     if track_loss:
         num_digits = int(math.log10(len(train_loader))) + 1
     for batch, (X, y) in enumerate(train_loader, start=1):
+        if use_gpu:
+            X = X.cuda()
+            y = y.cuda()
         pred_value = model(X)
         loss = loss_fn(pred_value, y)
 
@@ -45,7 +51,8 @@ def test_model(
     model: nn.Module,
     test_loader: DataLoader,
     loss_fn: nn.Module,
-    compute_accuracy: bool
+    compute_accuracy: bool,
+    use_gpu: bool = False
 ) -> tuple[float, float]:
     """
     Evaluate `model` based on `loss_fn` and return the average score(s).
@@ -62,6 +69,9 @@ def test_model(
     model.eval()
     total_loss, total_accuracy = 0, 0
     for X, y in test_loader:
+        if use_gpu:
+            X = X.cuda()
+            y= y.cuda()
         pred = model(X)
         total_loss += loss_fn(pred, y)
         if compute_accuracy:
