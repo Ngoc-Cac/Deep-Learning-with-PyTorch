@@ -10,6 +10,7 @@ def draw_filters(
     image: Tensor,
     convolved_filters: Tensor,
     cmap: str = 'gray_r',
+    *,
     fig: Optional[Figure] = None,
 ) -> Figure:
     """
@@ -39,14 +40,14 @@ def draw_filters(
         if len(ax_rows) - 1 == cols:
             layout.append(ax_rows)
             ax_rows = ['Image']
-    if len(ax_rows) - 1 != cols:
+    if 1 < len(ax_rows) < cols + 1:
         missing = cols - len(ax_rows) + 1
         ax_rows.extend(('.' for _ in range(missing)))
         layout.append(ax_rows)
 
 
     if fig is None:
-        fig = plt.figure(figsize=(10, 5))
+        fig = plt.figure()
     width_ratios = [cols]
     width_ratios.extend(1 for _ in range(cols))
     axes = fig.subplot_mosaic(layout, width_ratios=width_ratios)
@@ -60,3 +61,4 @@ def draw_filters(
         axes[i].imshow(convolved_filters[i], cmap=cmap)
         axes[i].set_xticks([])
         axes[i].set_yticks([])
+    return fig
