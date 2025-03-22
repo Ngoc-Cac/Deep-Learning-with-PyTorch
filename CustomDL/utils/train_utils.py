@@ -4,8 +4,6 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
-from typing import Optional
-
 
 def train_model(
     model: nn.Module,
@@ -47,6 +45,7 @@ def train_model(
         if track_loss:
             print(f"Batch {batch:>{num_digits}}/{len(train_loader)} || Loss: {loss}")
 
+@torch.no_grad()
 def test_model(
     model: nn.Module,
     test_loader: DataLoader,
