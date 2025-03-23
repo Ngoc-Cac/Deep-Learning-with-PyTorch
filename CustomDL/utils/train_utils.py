@@ -12,7 +12,7 @@ def train_model(
     optimizer: nn.Module,
     track_loss: bool = False,
     use_gpu: bool = False
-):
+) -> list[float]:
     """
     Performs backpropogation on `model` using `optimizer`.
 
@@ -21,12 +21,14 @@ def train_model(
         for each backpropogations.
     :param nn.Module loss_fn: The loss function to based on which to compute gradients.
     :param nn.Module optimizer: The optimization algorithm for gradient descent.
-    :param bool track_loss: Whether or not to print out statistics on each backpropogation.
+    :param bool track_loss: Whether or not to return loss on each backpropogation.
         This is `False` by default.
+    :return: A list of loss values per batch if `track_loss=True` else an empty list.
+    :rtype: list[float]
     """
     model.train()
-    if track_loss:
-        num_digits = int(math.log10(len(train_loader))) + 1
+    losses = []
+
     for batch, (X, y) in enumerate(train_loader, start=1):
         if use_gpu:
             X = X.cuda()
@@ -42,8 +44,8 @@ def train_model(
         loss.backward()
         optimizer.step()
 
-        if track_loss:
-            print(f"Batch {batch:>{num_digits}}/{len(train_loader)} || Loss: {loss}")
+        if track_loss: losses.append(loss.item())
+    return losses
 
 @torch.no_grad()
 def test_model(
