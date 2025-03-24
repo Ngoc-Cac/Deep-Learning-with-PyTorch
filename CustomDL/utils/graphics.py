@@ -6,6 +6,22 @@ from torch import Tensor
 from typing import Optional
 
 
+def _best_grid_dim(length: int) -> tuple[int, int]:
+    """
+    Return the dimension of a grid that can contain all objects 
+    in a sequence `length` long with least extra spaces.
+
+    For example, the dimenson for a grid that can contain 5 elements is (2, 3).
+    For a sequence of 7 elements, the function returns the dimension (3, 3).
+
+    :param int length: The length of the sequence of objects
+    :return: The rows and columns as a tuple.
+    :rtype: tuple[int, int]
+    """
+    rows = round(math.sqrt(length))
+    return rows, int(math.ceil(length / rows))
+
+
 def draw_filters(
     image: Tensor,
     convolved_filters: Tensor,
@@ -15,7 +31,7 @@ def draw_filters(
 ) -> Figure:
     """
     Draw the original image along with its filtered version. Each filter can be
-        interpreted as a channel of the image.
+    interpreted as a channel of the image.
 
     :param torch.Tensor image: The original image to draw. This should have shape
         (C, H, W) where C is the number of channels, H and W is the height and width
@@ -31,8 +47,7 @@ def draw_filters(
     :return: The figure drawn on.
     :rtype: matplotlib.figure.Figure
     """
-    rows = round(math.sqrt(convolved_filters.shape[0]))
-    cols = int(math.ceil(convolved_filters.shape[0] / rows))
+    _, cols = _best_grid_dim(convolved_filters.shape[0])
     layout = []
     ax_rows = ['Image']
     for i in range(convolved_filters.shape[0]):
@@ -52,8 +67,8 @@ def draw_filters(
     width_ratios.extend(1 for _ in range(cols))
     axes = fig.subplot_mosaic(layout, width_ratios=width_ratios)
 
-    axes['Image'].imshow(image.permute((1, 2, 0)), cmap=(None if image.shape[0] > 1 else cmap))
     axes['Image'].set_title('Original Image')
+    axes['Image'].imshow(image.permute((1, 2, 0)), cmap=(None if image.shape[0] > 1 else cmap))
     axes['Image'].set_xticks([])
     axes['Image'].set_yticks([])
     for i in range(convolved_filters.shape[0]):
