@@ -30,7 +30,7 @@ def train_loop(
     losses = []
     pbar = tqdm(train_loader, total=len(train_loader))
 
-    for (X, y) in pbar:
+    for X, y in pbar:
         if use_gpu:
             X = X.cuda()
             y = y.cuda()
