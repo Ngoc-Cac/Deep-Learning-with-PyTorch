@@ -45,7 +45,7 @@ def train_loop(
         loss.backward()
         optimizer.step()
 
-        pbar.set_postfix_str(f"{loss}")
+        pbar.set_postfix_str(f"{loss=}")
         if track_loss: losses.append(loss.item())
     return losses
 
