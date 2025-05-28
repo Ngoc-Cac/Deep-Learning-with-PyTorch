@@ -55,7 +55,7 @@ def test_loop(
     test_loader: DataLoader,
     loss_fn: nn.Module,
     use_gpu: bool = False
-) -> tuple[float, float]:
+) -> float:
     """
     Evaluate `model` based on `loss_fn` and return the average score(s).
 
