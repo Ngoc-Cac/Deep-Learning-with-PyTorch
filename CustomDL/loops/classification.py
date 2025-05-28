@@ -1,8 +1,8 @@
-import math
 import torch
 
 from torch import nn
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 
 def train_loop(
@@ -28,8 +28,9 @@ def train_loop(
     """
     model.train()
     losses = []
+    pbar = tqdm(train_loader, total=len(train_loader))
 
-    for batch, (X, y) in enumerate(train_loader, start=1):
+    for batch, (X, y) in pbar:
         if use_gpu:
             X = X.cuda()
             y = y.cuda()
@@ -44,6 +45,7 @@ def train_loop(
         loss.backward()
         optimizer.step()
 
+        pbar.set_postfix_str(f"{loss}")
         if track_loss: losses.append(loss.item())
     return losses
 
