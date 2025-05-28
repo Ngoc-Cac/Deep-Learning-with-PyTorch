@@ -45,8 +45,9 @@ def train_loop(
         loss.backward()
         optimizer.step()
 
+        loss = loss.detach().item()
         pbar.set_postfix_str(f"{loss=}")
-        if track_loss: losses.append(loss.item())
+        if track_loss: losses.append(loss)
     return losses
 
 @torch.no_grad()
@@ -75,5 +76,5 @@ def test_loop(
             X = X.cuda()
             y= y.cuda()
         pred = model(X)
-        total_loss += loss_fn(pred, y)
+        total_loss += loss_fn(pred, y).item()
     return total_loss / len(test_loader)
