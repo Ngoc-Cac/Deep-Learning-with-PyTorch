@@ -31,7 +31,7 @@ class RNN(nn.Module):
             on the hidden state of the network.
         """
         super().__init__()
-        if activation_fn is None: activation_fn = nn.ReLU()
+        if activation_fn is None: activation_fn = nn.Tanh()
         self.act_fn = activation_fn
 
 
