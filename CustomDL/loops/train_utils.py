@@ -5,7 +5,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 
 
-def train_model(
+def train_loop(
     model: nn.Module,
     train_loader: DataLoader,
     loss_fn: nn.Module,
@@ -48,7 +48,7 @@ def train_model(
     return losses
 
 @torch.no_grad()
-def test_model(
+def test_loop(
     model: nn.Module,
     test_loader: DataLoader,
     loss_fn: nn.Module,
