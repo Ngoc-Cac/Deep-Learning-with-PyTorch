@@ -52,6 +52,8 @@ class RNN(nn.Module):
     ) -> tuple[torch.Tensor]:
         if hidden_state is None:
             hidden_state = torch.zeros((sequence.shape[0], self.bias_hidden.shape[0]))
+            if self.bias_in.is_cuda:
+                hidden_state = hidden_state.cuda()
             
         output = torch.stack([
             (hidden_state := self.act_fn(
